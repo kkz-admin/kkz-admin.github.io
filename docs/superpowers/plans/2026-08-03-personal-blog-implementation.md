@@ -500,13 +500,13 @@ export const siteProfile = {
 export const projectProofs = [
   { value: '1500+', label: '发明作品批量交付', detail: '交付周期从 30 天压缩至 7 天' },
   { value: '76%', label: '交付周期缩短', detail: '串联数据、配图、展板与报告流程' },
-  { value: '50+', label: 'AI 产品概念', detail: '提案通过率提升 40%' },
+  { value: '50+', label: 'AI 产品概念', detail: '设计周期缩短 50%' },
 ] as const;
 
 export const timeline = [
   { period: '2026.06—2026.07', title: '科创夏令营成长积分与奖励管理系统', role: '项目负责人' },
   { period: '2026.03—2026.05', title: '全球发明大赛批量交付系统', role: '自动化系统搭建' },
-  { period: '2025.12—至今', title: '智能硬件 AI 视觉生成与产品提案', role: '提示词工程 / 产品策略' },
+  { period: '2025.11—2026.03', title: '智能硬件 AI 视觉生成与产品提案', role: 'AI 内容设计与产品支持' },
   { period: '2024.03—2026.05', title: '校园网络中心', role: '副部长' },
 ] as const;
 ```
@@ -1396,7 +1396,7 @@ git commit -m "feat: render article reading experience"
 - Create: `tests/e2e/about.spec.ts`
 
 **Interfaces:**
-- Consumes: supplied resume at `C:\Users\LENOVO\Downloads\尹禹皓_简历.pdf`, `timeline`, `siteProfile`, and `withBase()`.
+- Consumes: optimized resume at `C:\Users\LENOVO\Downloads\尹禹皓.pdf`, `timeline`, `siteProfile`, and `withBase()`.
 - Produces: optimized portrait asset, phone-redacted public resume, `AboutTimeline`, and a complete About page.
 
 - [ ] **Step 1: Write the failing About-page and privacy tests**
