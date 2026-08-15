@@ -1,6 +1,9 @@
 ---
-import '../styles/global.css';
-import { withBase } from '../lib/url';
+import "../styles/global.css";
+import SEOHead from "../components/SEOHead.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { withBase } from "../lib/url";
 
 interface Props {
   title: string;
@@ -8,8 +11,7 @@ interface Props {
   image?: string;
 }
 
-const { title, description, image = withBase('/favicon.svg', import.meta.env.BASE_URL) } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,15 +19,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    <link rel="icon" href={image} />
-    <title>{title}</title>
+    <SEOHead title={title} description={description} image={image} />
+    <link rel="icon" href={withBase("/favicon.svg")} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">跳到正文</a>
+    <SiteHeader />
     <main id="main-content">
       <slot />
     </main>
+    <SiteFooter />
   </body>
 </html>

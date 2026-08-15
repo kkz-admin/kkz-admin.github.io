@@ -1,0 +1,11 @@
+---
+import { siteProfile } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <p>把业务需求转化为可交付方案。</p>
+    <a href={`mailto:${siteProfile.email}`}>{siteProfile.email}</a>
+    <small>© {new Date().getFullYear()} 尹禹皓</small>
+  </div>
+</footer>

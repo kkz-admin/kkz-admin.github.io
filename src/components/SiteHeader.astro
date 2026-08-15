@@ -1,0 +1,49 @@
+---
+import { withBase } from "../lib/url";
+
+const items = [
+  { href: "/", label: "首页" },
+  { href: "/blog/", label: "博客" },
+  { href: "/about/", label: "关于" },
+];
+
+const basePath = import.meta.env.BASE_URL.replace(/^\/+|\/+$/g, "");
+
+function normalizePathname(pathname: string) {
+  const pathWithoutBase =
+    basePath &&
+    (pathname === `/${basePath}` || pathname.startsWith(`/${basePath}/`))
+      ? pathname.slice(basePath.length + 1) || "/"
+      : pathname;
+
+  return pathWithoutBase === "/"
+    ? "/"
+    : `/${pathWithoutBase.replace(/^\/+|\/+$/g, "")}/`;
+}
+
+const currentPathname = normalizePathname(Astro.url.pathname);
+---
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="wordmark" href={withBase("/")} aria-label="尹禹皓首页"
+      >YIN · YUHAO</a
+    >
+    <nav aria-label="主导航">
+      {
+        items.map((item) => (
+          <a
+            href={withBase(item.href)}
+            aria-current={
+              currentPathname === normalizePathname(item.href)
+                ? "page"
+                : undefined
+            }
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
