@@ -1,0 +1,46 @@
+---
+import { timeline } from '../data/site';
+---
+
+<ol class="timeline">
+  {
+    timeline.map((item) => (
+      <li>
+        <time>{item.period}</time>
+        <div>
+          <h2>{item.title}</h2>
+          <p>{item.role}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .timeline {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+  li {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  time,
+  p {
+    color: var(--muted);
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  @media (max-width: 42rem) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

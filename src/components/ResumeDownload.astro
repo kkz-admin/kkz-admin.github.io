@@ -1,0 +1,16 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { withBase } from '../lib/url';
+
+const resumePath = path.join(process.cwd(), 'public', 'resume', 'yin-yuhao-resume.pdf');
+const resumeExists = fs.existsSync(resumePath);
+---
+
+{
+  resumeExists && (
+    <a class="pill" href={withBase('/resume/yin-yuhao-resume.pdf')} download>
+      下载公开版简历
+    </a>
+  )
+}

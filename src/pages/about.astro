@@ -1,0 +1,98 @@
+---
+import profileImage from '../assets/profile.webp';
+import AboutTimeline from '../components/AboutTimeline.astro';
+import ResumeDownload from '../components/ResumeDownload.astro';
+import { siteProfile } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="关于 · 尹禹皓"
+  description="尹禹皓的项目管理、售前协同、实施交付、产品协同经历与公开简历。"
+>
+  <section class="shell about-hero">
+    <div>
+      <p class="eyebrow">ABOUT</p>
+      <h1>关于我</h1>
+      <p>{siteProfile.summary}</p>
+      <p>目标岗位：项目助理、实施工程师、项目管理、售前工程师。</p>
+      <ResumeDownload />
+    </div>
+    <img
+      src={profileImage.src}
+      width={profileImage.width}
+      height={profileImage.height}
+      alt="尹禹皓职业照片"
+    />
+  </section>
+  <section class="shell section">
+    <p class="eyebrow">EXPERIENCE</p>
+    <h2 class="section-title">经历与项目</h2>
+    <AboutTimeline />
+  </section>
+  <section class="shell section">
+    <p class="eyebrow">HOW I WORK</p>
+    <h2 class="section-title">我的工作方式</h2>
+    <div class="work-grid">
+      <article class="card">
+        <h3>澄清需求</h3>
+        <p>把模糊期待转换成范围、流程和验收条件。</p>
+      </article>
+      <article class="card">
+        <h3>表达方案</h3>
+        <p>讲清业务价值、适用边界、资源投入和风险。</p>
+      </article>
+      <article class="card">
+        <h3>推进交付</h3>
+        <p>维护责任人、依赖、里程碑和问题闭环。</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero {
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: clamp(2rem, 8vw, 7rem);
+    align-items: center;
+    padding-block: clamp(5rem, 12vw, 10rem);
+  }
+  h1 {
+    margin: 0.75rem 0;
+    font-size: clamp(3rem, 9vw, 7rem);
+    letter-spacing: -0.06em;
+  }
+  .about-hero p {
+    max-width: 42rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .about-hero img {
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    filter: grayscale(1);
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .work-grid article {
+    padding: 1.5rem;
+  }
+  .work-grid p {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  @media (max-width: 48rem) {
+    .about-hero,
+    .work-grid {
+      grid-template-columns: 1fr;
+    }
+    .about-hero img {
+      order: -1;
+      max-width: 18rem;
+    }
+  }
+</style>
