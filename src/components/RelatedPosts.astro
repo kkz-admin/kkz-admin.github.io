@@ -1,0 +1,43 @@
+---
+import type { BlogPost } from "../lib/posts";
+import { withBase } from "../lib/url";
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="related" aria-labelledby="related-title">
+      <h2 id="related-title">相关阅读</h2>
+      {posts.map((post) => (
+        <a class="card" href={withBase(`/blog/${post.id}/`)}>
+          <span>{post.data.category}</span>
+          <strong>{post.data.title}</strong>
+        </a>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .related {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+  }
+  .related > a {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    text-decoration: none;
+  }
+  .related span {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+</style>
