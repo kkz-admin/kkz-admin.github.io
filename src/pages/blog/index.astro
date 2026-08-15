@@ -1,0 +1,35 @@
+---
+import BlogIndex from "../../components/BlogIndex.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedPosts } from "../../lib/posts";
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout
+  title="博客 · 尹禹皓"
+  description="项目复盘、AI 工具实践与行业观察。"
+>
+  <header class="shell page-intro">
+    <p class="eyebrow">JOURNAL</p>
+    <h1>博客</h1>
+    <p>记录项目如何发生、工具如何进入流程，以及我对行业的持续判断。</p>
+  </header>
+  <section class="shell section"><BlogIndex posts={posts} /></section>
+</BaseLayout>
+
+<style>
+  .page-intro {
+    padding-block: clamp(5rem, 12vw, 10rem);
+  }
+  h1 {
+    font-size: clamp(3rem, 9vw, 7rem);
+    margin: 0.75rem 0;
+    letter-spacing: -0.06em;
+  }
+  .page-intro > p:last-child {
+    max-width: 38rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+</style>

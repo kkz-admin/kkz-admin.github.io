@@ -1,0 +1,67 @@
+---
+import type { BlogPost } from "../lib/posts";
+import { withBase } from "../lib/url";
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+---
+
+<article
+  class="article-card card"
+  data-post
+  data-category={post.data.category}
+  data-description={post.data.description}
+  data-tags={JSON.stringify(post.data.tags)}
+  data-title={post.data.title}
+>
+  <p>
+    <span>{post.data.category}</span><time
+      datetime={post.data.publishedAt.toISOString()}
+      >{post.data.publishedAt.toLocaleDateString("zh-CN")}</time
+    >
+  </p>
+  <h2><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+  <p>{post.data.description}</p>
+  <ul aria-label="标签">
+    {post.data.tags.map((tag) => <li>{tag}</li>)}
+  </ul>
+</article>
+
+<style>
+  .article-card {
+    padding: clamp(1.25rem, 4vw, 2rem);
+  }
+  .article-card > p:first-child {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+  }
+  h2 {
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-weight: 500;
+  }
+  h2 a {
+    text-decoration: none;
+  }
+  .article-card > p {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import type { BlogPost } from "../lib/posts";
+import ArticleCard from "./ArticleCard.astro";
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+const categories = ["全部", "项目复盘", "AI 工具实践", "行业观察"];
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+const archive = Object.entries(
+  posts.reduce<Record<string, number>>((years, post) => {
+    const year = String(post.data.publishedAt.getFullYear());
+    years[year] = (years[year] ?? 0) + 1;
+    return years;
+  }, {}),
+).sort(([a], [b]) => Number(b) - Number(a));
+---
+
+<div class="blog-tools" data-blog-tools>
+  <label
+    >搜索文章<input
+      type="search"
+      aria-label="搜索文章"
+      data-blog-search
+    /></label
+  >
+  <div role="group" aria-label="文章分类">
+    {
+      categories.map((category) => (
+        <button
+          type="button"
+          data-category-button={category}
+          aria-pressed={category === "全部"}
+        >
+          {category}
+        </button>
+      ))
+    }
+  </div>
+  <div role="group" aria-label="文章标签">
+    {
+      tags.map((tag) => (
+        <button type="button" data-tag-button={tag}>
+          #{tag}
+        </button>
+      ))
+    }
+  </div>
+</div>
+<aside class="archive" aria-label="文章归档">
+  <strong>归档</strong>
+  {
+    archive.map(([year, count]) => (
+      <span>
+        {year} · {count} 篇
+      </span>
+    ))
+  }
+</aside>
+<p class="empty" data-empty hidden>没有找到匹配的文章。</p>
+<div class="blog-grid" data-blog-grid>
+  {posts.map((post) => <ArticleCard post={post} />)}
+</div>
+
+<script>
+  import { initBlogFilter } from "../scripts/blog-filter";
+
+  initBlogFilter(document);
+</script>
+
+<style>
+  .blog-tools {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  label {
+    display: grid;
+    gap: 0.5rem;
+    color: var(--muted);
+  }
+  input {
+    width: 100%;
+    min-height: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 1rem;
+    background: #0b0b0b;
+    color: var(--text);
+  }
+  [role="group"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  button {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+  }
+  button[aria-pressed="true"] {
+    color: #050505;
+    background: var(--text);
+  }
+  .blog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .archive {
+    display: flex;
+    gap: 1rem;
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .empty {
+    color: var(--muted);
+  }
+</style>
