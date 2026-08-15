@@ -4,9 +4,37 @@ import { check } from "linkinator";
 
 export const LINK_CHECK_PORT = 4321;
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function normalizeBasePath(basePath) {
+  const normalized = basePath.trim().replace(/^\/+|\/+$/g, "");
+  return normalized ? `/${normalized}` : "";
+}
+
+function createUrlRewriteExpressions({ port, basePath, site }) {
+  const staticOrigin = `http://127.0.0.1:${port}`;
+  const base = normalizeBasePath(basePath);
+  const origins = new Set([
+    staticOrigin,
+    "http://localhost:4321",
+    new URL(site).origin,
+  ]);
+
+  return [...origins].map((origin) => ({
+    pattern: new RegExp(
+      `^${escapeRegExp(origin)}${escapeRegExp(base)}(?=/|\\?|#|$)`,
+    ),
+    replacement: staticOrigin,
+  }));
+}
+
 export async function checkStaticLinks({
   root = resolve(process.cwd(), "dist"),
   port = LINK_CHECK_PORT,
+  basePath = process.env.BASE_PATH ?? "/",
+  site = process.env.SITE_URL ?? "http://localhost:4321",
 } = {}) {
   return check({
     path: "/",
@@ -14,12 +42,11 @@ export async function checkStaticLinks({
     port,
     recurse: true,
     linksToSkip: ["^mailto:"],
-    urlRewriteExpressions: [
-      {
-        pattern: new RegExp(`^http://localhost:${port}(?=/|$)`),
-        replacement: `http://127.0.0.1:${port}`,
-      },
-    ],
+    urlRewriteExpressions: createUrlRewriteExpressions({
+      port,
+      basePath,
+      site,
+    }),
   });
 }
 

@@ -3,7 +3,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/url";
 ---
 
-<BaseLayout title="页面未找到 · 尹禹皓" description="请求的页面不存在。">
+<BaseLayout
+  title="页面未找到 · 尹禹皓"
+  description="请求的页面不存在。"
+  noindex
+>
   <section class="shell not-found">
     <div class="dark-moon" aria-hidden="true"></div>
     <p class="eyebrow">404</p>

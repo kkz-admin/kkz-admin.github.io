@@ -34,4 +34,44 @@ describe("BaseLayout", () => {
 
     expect(html).toContain('rel="icon" href="/personal-blog/favicon.svg"');
   }, 15_000);
+
+  it("keeps 404 recovery links deployable and out of search indexes", async () => {
+    const variants = [
+      { basePath: "/", homeHref: "/", blogHref: "/blog/" },
+      {
+        basePath: "/personal-blog/",
+        homeHref: "/personal-blog/",
+        blogHref: "/personal-blog/blog/",
+      },
+    ];
+
+    for (const variant of variants) {
+      const command = process.platform === "win32" ? "powershell.exe" : "pnpm";
+      const args =
+        process.platform === "win32"
+          ? [
+              "-NoProfile",
+              "-Command",
+              `$env:SITE_URL = 'https://example.com'; $env:BASE_PATH = '${variant.basePath}'; pnpm build`,
+            ]
+          : ["build"];
+
+      execFileSync(command, args, {
+        cwd: projectRoot,
+        env: {
+          ...buildEnvironment,
+          SITE_URL: "https://example.com",
+          BASE_PATH: variant.basePath,
+        },
+        stdio: "pipe",
+      });
+
+      const html = await readFile(`${projectRoot}/dist/404.html`, "utf8");
+
+      expect(html).toContain('<meta name="robots" content="noindex"');
+      expect(html).not.toContain('rel="canonical"');
+      expect(html).toContain(`href="${variant.homeHref}"`);
+      expect(html).toContain(`href="${variant.blogHref}"`);
+    }
+  }, 30_000);
 });

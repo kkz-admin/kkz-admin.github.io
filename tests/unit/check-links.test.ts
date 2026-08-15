@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -26,5 +26,44 @@ describe("checkStaticLinks", () => {
 
     expect(result.passed).toBe(false);
     expect(result.links.some((link) => link.state === "BROKEN")).toBe(true);
+  });
+
+  it("checks base-path and production-origin links against the local build", async () => {
+    const fixture = await mkdtemp(join(tmpdir(), "yin-yuhao-base-links-"));
+    fixtures.push(fixture);
+    await writeFile(
+      join(fixture, "index.html"),
+      `<!doctype html>
+        <a href="/personal-blog/guide/">Guide</a>
+        <a href="/personal-blog/missing-local/">Missing local page</a>
+        <a href="https://example.com/personal-blog/missing-production/">Missing production page</a>`,
+      "utf8",
+    );
+    await mkdir(join(fixture, "guide"));
+    await writeFile(
+      join(fixture, "guide", "index.html"),
+      "<!doctype html><title>Guide</title>",
+      "utf8",
+    );
+
+    const { checkStaticLinks } = await import("../../scripts/check-links.mjs");
+    const result = await checkStaticLinks({
+      root: fixture,
+      port: 4323,
+      basePath: "/personal-blog/",
+      site: "https://example.com",
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ url: "guide/", state: "OK" }),
+        expect.objectContaining({ url: "missing-local/", state: "BROKEN" }),
+        expect.objectContaining({
+          url: "missing-production/",
+          state: "BROKEN",
+        }),
+      ]),
+    );
   });
 });

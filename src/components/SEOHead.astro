@@ -5,15 +5,22 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  noindex?: boolean;
 }
 
-const { title, description, image = "/favicon.svg" } = Astro.props;
+const {
+  title,
+  description,
+  image = "/favicon.svg",
+  noindex = false,
+} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(withBase(image), Astro.site);
 ---
 
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+{!noindex && <link rel="canonical" href={canonical} />}
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
