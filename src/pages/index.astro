@@ -1,7 +1,23 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutStrip from "../components/AboutStrip.astro";
+import FeaturedEssay from "../components/FeaturedEssay.astro";
+import LatestJournal from "../components/LatestJournal.astro";
+import MoonHero from "../components/MoonHero.astro";
+import ProjectProof from "../components/ProjectProof.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getFeaturedPost, getPublishedPosts } from "../lib/posts";
+
+const posts = await getPublishedPosts();
+const featured = getFeaturedPost(posts) ?? posts[0];
 ---
 
-<BaseLayout title="尹禹皓 · 个人博客" description="AI 项目实施、售前协同与项目管理个人博客">
-  <div class="shell"><h1>尹禹皓</h1></div>
+<BaseLayout
+  title="尹禹皓 · AI 项目实施、售前协同与项目管理"
+  description="记录 AI 项目实施、售前协同、项目管理、产品协作与业务交付。"
+>
+  <MoonHero />
+  {featured && <FeaturedEssay post={featured} />}
+  <ProjectProof />
+  <LatestJournal posts={posts.slice(0, 3)} />
+  <AboutStrip />
 </BaseLayout>

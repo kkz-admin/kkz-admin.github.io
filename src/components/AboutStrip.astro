@@ -1,0 +1,33 @@
+---
+import { withBase } from "../lib/url";
+---
+
+<section class="section shell" aria-labelledby="about-strip-title">
+  <p class="eyebrow">ABOUT</p><h2 class="section-title" id="about-strip-title">
+    关于我
+  </h2><div class="about-strip">
+    <p>
+      我希望站在客户、业务与技术之间，参与需求澄清、售前方案、项目管理、实施推进和交付复盘。
+    </p><a class="pill" href={withBase("/about/")}>查看经历与简历</a>
+  </div>
+</section>
+<style>
+  .about-strip {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .about-strip p {
+    max-width: 36rem;
+    color: var(--muted);
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    line-height: 1.55;
+  }
+  @media (max-width: 42rem) {
+    .about-strip {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+</style>

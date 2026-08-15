@@ -1,0 +1,50 @@
+---
+import { projectProofs } from "../data/site";
+---
+
+<section class="section shell" aria-labelledby="projects-title">
+  <p class="eyebrow">SELECTED PROOF</p><h2
+    class="section-title"
+    id="projects-title"
+  >
+    代表项目
+  </h2><div class="proof-grid">
+    {
+      projectProofs.map((project) => (
+        <article class="card proof">
+          <>
+            <strong>{project.value}</strong>
+            <h3>{project.label}</h3>
+            <p>{project.detail}</p>
+          </>
+        </article>
+      ))
+    }
+  </div>
+</section>
+<style>
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .proof {
+    padding: 1.5rem;
+  }
+  strong {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 500;
+  }
+  h3 {
+    font-size: 1rem;
+  }
+  p {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  @media (max-width: 48rem) {
+    .proof-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

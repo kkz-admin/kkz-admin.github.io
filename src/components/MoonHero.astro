@@ -1,0 +1,87 @@
+---
+import { siteProfile } from "../data/site";
+import { withBase } from "../lib/url";
+---
+
+<section class="moon-hero shell">
+  <div class="moon-orbit" aria-hidden="true"><span></span></div>
+  <p class="eyebrow">{siteProfile.eyebrow}</p><h1>{siteProfile.headline}</h1><p
+    class="hero-summary"
+  >
+    {siteProfile.summary}
+  </p>
+  <div class="hero-actions">
+    <a class="pill" href={withBase("/blog/")}>阅读博客</a><a
+      class="pill"
+      href={withBase("/about/")}>了解我</a>
+  </div>
+</section>
+<style>
+  .moon-hero {
+    position: relative;
+    display: grid;
+    min-height: min(46rem, 86vh);
+    align-content: center;
+    overflow: hidden;
+  }
+  h1 {
+    position: relative;
+    z-index: 2;
+    max-width: 13ch;
+    margin: 1.2rem 0;
+    font-size: clamp(3rem, 8vw, 6.8rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.065em;
+  }
+  .hero-summary {
+    position: relative;
+    z-index: 2;
+    max-width: 40rem;
+    color: var(--muted);
+    font-size: clamp(1rem, 2vw, 1.22rem);
+    line-height: 1.8;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .moon-orbit {
+    position: absolute;
+    right: -8rem;
+    top: 4rem;
+    width: min(42vw, 30rem);
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+  .moon-orbit span {
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 35% 35%,
+      #292929 0 3%,
+      #0b0b0b 40%,
+      #000 68%
+    );
+    box-shadow: -1rem 0 2.5rem rgba(255, 255, 255, 0.34);
+    animation: moon-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes moon-drift {
+    from {
+      transform: translate3d(-1%, -1%, 0) scale(0.99);
+    }
+    to {
+      transform: translate3d(1.5%, 1%, 0) scale(1.02);
+    }
+  }
+  @media (max-width: 42rem) {
+    .moon-orbit {
+      opacity: 0.55;
+      right: -10rem;
+      width: 24rem;
+    }
+  }
+</style>

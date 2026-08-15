@@ -1,0 +1,59 @@
+---
+import type { BlogPost } from "../lib/posts";
+import { withBase } from "../lib/url";
+interface Props {
+  post: BlogPost;
+}
+const { post } = Astro.props;
+---
+
+<section class="section shell" aria-labelledby="featured-title">
+  <p class="eyebrow">FEATURED ESSAY</p><h2
+    class="section-title"
+    id="featured-title"
+  >
+    本期精选
+  </h2><a class="featured card" href={withBase(`/blog/${post.id}/`)}
+    ><div>
+      <small>{post.data.category}</small><h3>{post.data.title}</h3><p>
+        {post.data.description}
+      </p>
+    </div><div class="featured-moon" aria-hidden="true"></div></a>
+</section>
+<style>
+  .featured {
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    min-height: 18rem;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+  }
+  .featured > div:first-child {
+    padding: clamp(1.5rem, 5vw, 3rem);
+  }
+  h3 {
+    max-width: 20ch;
+    margin: 1rem 0;
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 500;
+  }
+  p,
+  small {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .featured-moon {
+    background:
+      radial-gradient(circle at 48% 48%, #aaa 0 1%, #292929 18%, #070707 54%),
+      #090909;
+  }
+  @media (max-width: 42rem) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
+    .featured-moon {
+      min-height: 10rem;
+    }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import type { BlogPost } from "../lib/posts";
+import { withBase } from "../lib/url";
+interface Props {
+  posts: BlogPost[];
+}
+const { posts } = Astro.props;
+---
+
+<section class="section shell" aria-labelledby="latest-title">
+  <p class="eyebrow">LATEST JOURNAL</p><h2
+    class="section-title"
+    id="latest-title"
+  >
+    最近文章
+  </h2><div class="journal-list">
+    {
+      posts.map((post) => (
+        <a href={withBase(`/blog/${post.id}/`)}>
+          <>
+            <span>{post.data.category}</span>
+            <strong>{post.data.title}</strong>
+            <time datetime={post.data.publishedAt.toISOString()}>
+              {post.data.publishedAt.toLocaleDateString("zh-CN")}
+            </time>
+          </>
+        </a>
+      ))
+    }
+  </div>
+</section>
+<style>
+  .journal-list {
+    border-top: 1px solid var(--border);
+  }
+  a {
+    display: grid;
+    grid-template-columns: 8rem 1fr auto;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+  }
+  span,
+  time {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 42rem) {
+    a {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>
