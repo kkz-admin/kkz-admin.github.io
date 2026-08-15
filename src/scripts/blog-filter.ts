@@ -12,7 +12,7 @@ function postFromElement(element: HTMLElement): SearchablePost {
 export function initBlogFilter(root: Document): void {
   const search = root.querySelector<HTMLInputElement>("[data-blog-search]");
   const categoryButtons = [
-    ...root.querySelectorAll<HTMLButtonElement>("[data-category-button]"),
+    ...root.querySelectorAll<HTMLElement>("[data-category-button]"),
   ];
   const tagButtons = [
     ...root.querySelectorAll<HTMLButtonElement>("[data-tag-button]"),
@@ -41,10 +41,15 @@ export function initBlogFilter(root: Document): void {
     });
   }
   for (const button of categoryButtons) {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
       category = button.dataset.categoryButton ?? "全部";
-      for (const item of categoryButtons)
-        item.setAttribute("aria-pressed", String(item === button));
+      for (const item of categoryButtons) {
+        const active = item === button;
+        item.setAttribute("data-active", String(active));
+        if (active) item.setAttribute("aria-current", "page");
+        else item.removeAttribute("aria-current");
+      }
       render();
     });
   }

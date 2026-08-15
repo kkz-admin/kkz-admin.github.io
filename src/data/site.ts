@@ -38,4 +38,9 @@ export const timeline = [
     role: "AI 内容设计与产品支持",
   },
   { period: "2024.03—2026.05", title: "校园网络中心", role: "副部长" },
+  {
+    period: "2022.09—2026.06",
+    title: "北京理工大学珠海学院",
+    role: "网络工程",
+  },
 ] as const;

@@ -1,0 +1,57 @@
+---
+import ArticleCard from "../../../components/ArticleCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { BLOG_CATEGORIES } from "../../../lib/blog-paths";
+import { getPublishedPosts, type BlogPost } from "../../../lib/posts";
+import { withBase } from "../../../lib/url";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return BLOG_CATEGORIES.map(({ label, slug }) => ({
+    params: { category: slug },
+    props: {
+      label,
+      posts: posts.filter((post) => post.data.category === label),
+    },
+  }));
+}
+
+interface Props {
+  label: BlogPost["data"]["category"];
+  posts: BlogPost[];
+}
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`${label} · 博客 · 尹禹皓`}
+  description={`${label}文章归档。`}
+>
+  <header class="shell page-intro">
+    <p class="eyebrow">CATEGORY</p>
+    <h1>{label}</h1>
+    <a href={withBase("/blog/")}>返回全部文章</a>
+  </header>
+  <section class="shell section blog-grid">
+    {posts.map((post) => <ArticleCard post={post} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-intro {
+    padding-block: clamp(5rem, 12vw, 10rem) 2rem;
+  }
+  h1 {
+    margin: 0.75rem 0;
+    font-size: clamp(3rem, 9vw, 7rem);
+    letter-spacing: -0.06em;
+  }
+  .page-intro a {
+    color: var(--muted);
+  }
+  .blog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+</style>

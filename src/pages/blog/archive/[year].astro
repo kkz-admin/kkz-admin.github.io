@@ -1,0 +1,63 @@
+---
+import ArticleCard from "../../../components/ArticleCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getPublishedPosts, type BlogPost } from "../../../lib/posts";
+import { withBase } from "../../../lib/url";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const years = [
+    ...new Set(
+      posts.map((post) => String(post.data.publishedAt.getFullYear())),
+    ),
+  ];
+  return years.map((year) => ({
+    params: { year },
+    props: {
+      year,
+      posts: posts.filter(
+        (post) => String(post.data.publishedAt.getFullYear()) === year,
+      ),
+    },
+  }));
+}
+
+interface Props {
+  year: string;
+  posts: BlogPost[];
+}
+
+const { year, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`${year} 年归档 · 尹禹皓`}
+  description={`${year} 年发布的文章。`}
+>
+  <header class="shell page-intro">
+    <p class="eyebrow">ARCHIVE</p>
+    <h1>{year} 年</h1>
+    <a href={withBase("/blog/")}>返回全部文章</a>
+  </header>
+  <section class="shell section blog-grid">
+    {posts.map((post) => <ArticleCard post={post} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-intro {
+    padding-block: clamp(5rem, 12vw, 10rem) 2rem;
+  }
+  h1 {
+    margin: 0.75rem 0;
+    font-size: clamp(3rem, 9vw, 7rem);
+    letter-spacing: -0.06em;
+  }
+  .page-intro a {
+    color: var(--muted);
+  }
+  .blog-grid {
+    display: grid;
+    gap: 1rem;
+  }
+</style>

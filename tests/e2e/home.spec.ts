@@ -11,6 +11,14 @@ test("renders the approved A1 hierarchy", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "最近文章" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "关于我" })).toBeVisible();
 
+  await expect(page.locator("h1, h2")).toHaveText([
+    "让复杂工作，成为可交付、可复用的系统。",
+    "本期精选",
+    "代表项目",
+    "最近文章",
+    "关于我",
+  ]);
+
   const hero = page.locator(".moon-hero");
   await expect(hero.getByText("项目管理")).toBeVisible();
   await expect(hero.getByText("售前协同")).toBeVisible();

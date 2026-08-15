@@ -31,6 +31,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <AboutTimeline />
   </section>
   <section class="shell section">
+    <p class="eyebrow">RÉSUMÉ</p>
+    <h2 class="section-title">简历摘要</h2>
+    <div class="resume-summary card">
+      <p>
+        网络工程本科背景，具备校园网络管理、AI
+        内容设计、自动化交付与项目推进经历，面向项目实施、售前协同和项目管理岗位。
+      </p>
+      <dl>
+        <div><dt>院校</dt><dd>北京理工大学珠海学院</dd></div>
+        <div><dt>专业</dt><dd>网络工程</dd></div>
+        <div><dt>时间</dt><dd>2022.09—2026.06</dd></div>
+      </dl>
+    </div>
+  </section>
+  <section class="shell section">
     <p class="eyebrow">HOW I WORK</p>
     <h2 class="section-title">我的工作方式</h2>
     <div class="work-grid">
@@ -83,13 +98,35 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .work-grid article {
     padding: 1.5rem;
   }
+  .resume-summary {
+    padding: clamp(1.25rem, 4vw, 2rem);
+  }
+  .resume-summary > p {
+    max-width: 48rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .resume-summary dl {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+  }
+  .resume-summary dt {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .resume-summary dd {
+    margin: 0.35rem 0 0;
+  }
   .work-grid p {
     color: var(--muted);
     line-height: 1.7;
   }
   @media (max-width: 48rem) {
     .about-hero,
-    .work-grid {
+    .work-grid,
+    .resume-summary dl {
       grid-template-columns: 1fr;
     }
     .about-hero img {

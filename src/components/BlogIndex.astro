@@ -1,5 +1,7 @@
 ---
 import type { BlogPost } from "../lib/posts";
+import { archivePath, BLOG_CATEGORIES, categoryPath } from "../lib/blog-paths";
+import { withBase } from "../lib/url";
 import ArticleCard from "./ArticleCard.astro";
 
 interface Props {
@@ -7,7 +9,13 @@ interface Props {
 }
 
 const { posts } = Astro.props;
-const categories = ["全部", "项目复盘", "AI 工具实践", "行业观察"];
+const categories = [
+  { label: "全部", path: "/blog/" },
+  ...BLOG_CATEGORIES.map(({ label, slug }) => ({
+    label,
+    path: categoryPath(slug),
+  })),
+];
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 const archive = Object.entries(
   posts.reduce<Record<string, number>>((years, post) => {
@@ -29,13 +37,14 @@ const archive = Object.entries(
   <div role="group" aria-label="文章分类">
     {
       categories.map((category) => (
-        <button
-          type="button"
-          data-category-button={category}
-          aria-pressed={category === "全部"}
+        <a
+          href={withBase(category.path)}
+          data-category-button={category.label}
+          data-active={category.label === "全部" ? "true" : "false"}
+          aria-current={category.label === "全部" ? "page" : undefined}
         >
-          {category}
-        </button>
+          {category.label}
+        </a>
       ))
     }
   </div>
@@ -53,12 +62,66 @@ const archive = Object.entries(
   <strong>归档</strong>
   {
     archive.map(([year, count]) => (
-      <span>
+      <a href={withBase(archivePath(year))}>
         {year} · {count} 篇
-      </span>
+      </a>
     ))
   }
 </aside>
+<noscript>
+  <div class="static-browse">
+    <h2>静态浏览</h2>
+    <section>
+      <h3>按分类</h3>
+      {
+        BLOG_CATEGORIES.map(({ label, slug }) => (
+          <div>
+            <h4>
+              <a href={withBase(categoryPath(slug))}>{label}</a>
+            </h4>
+            <ul>
+              {posts
+                .filter((post) => post.data.category === label)
+                .map((post) => (
+                  <li>
+                    <a href={withBase(`/blog/${post.id}/`)}>
+                      {post.data.title}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+    <section>
+      <h3>按年份</h3>
+      {
+        archive.map(([year]) => (
+          <div>
+            <h4>
+              <a href={withBase(archivePath(year))}>{year}</a>
+            </h4>
+            <ul>
+              {posts
+                .filter(
+                  (post) =>
+                    String(post.data.publishedAt.getFullYear()) === year,
+                )
+                .map((post) => (
+                  <li>
+                    <a href={withBase(`/blog/${post.id}/`)}>
+                      {post.data.title}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+  </div>
+</noscript>
 <p class="empty" data-empty hidden>没有找到匹配的文章。</p>
 <div class="blog-grid" data-blog-grid>
   {posts.map((post) => <ArticleCard post={post} />)}
@@ -95,15 +158,19 @@ const archive = Object.entries(
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  button {
+  button,
+  [data-category-button] {
+    display: inline-flex;
+    align-items: center;
     min-height: 2.5rem;
     padding: 0 1rem;
     border: 1px solid var(--border);
     border-radius: 999px;
     background: transparent;
     color: var(--muted);
+    text-decoration: none;
   }
-  button[aria-pressed="true"] {
+  [data-active="true"] {
     color: #050505;
     background: var(--text);
   }
@@ -117,6 +184,21 @@ const archive = Object.entries(
     margin: 0 0 2rem;
     color: var(--muted);
     font-size: 0.85rem;
+  }
+  .archive a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+  .static-browse {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+  }
+  .static-browse section,
+  .static-browse ul {
+    display: grid;
+    gap: 0.75rem;
   }
   .empty {
     color: var(--muted);

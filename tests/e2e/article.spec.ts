@@ -13,4 +13,5 @@ test("renders article metadata, contents, and related reading", async ({
   await expect(page.locator("article > header > .eyebrow")).toHaveText(
     "项目复盘",
   );
+  await expect(page.getByText(/预计阅读 \d+ 分钟/)).toBeVisible();
 });
