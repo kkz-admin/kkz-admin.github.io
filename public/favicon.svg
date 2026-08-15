@@ -1,0 +1,11 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="Y 月影标志"
+>
+  <rect width="64" height="64" rx="14" fill="#050505" />
+  <circle cx="34" cy="32" r="20" fill="#f2f2ee" />
+  <circle cx="42" cy="27" r="20" fill="#050505" />
+  <path d="M18 18l8 14v14h5V32l8-14h-6l-4.5 8.5L24 18z" fill="#f2f2ee" />
+</svg>

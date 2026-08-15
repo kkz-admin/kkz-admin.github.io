@@ -15,9 +15,10 @@
     "format:check": "prettier --check .",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "links": "linkinator dist --recurse --skip mailto:",
+    "links": "node scripts/check-links.mjs",
     "resume:verify": "node scripts/verify-public-resume.mjs",
-    "lighthouse": "lhci autorun"
+    "lighthouse": "lhci autorun",
+    "quality": "pnpm format:check && pnpm check && pnpm test:unit && pnpm build && pnpm links && pnpm resume:verify"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

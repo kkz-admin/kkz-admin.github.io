@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/url";
+---
+
+<BaseLayout title="页面未找到 · 尹禹皓" description="请求的页面不存在。">
+  <section class="shell not-found">
+    <div class="dark-moon" aria-hidden="true"></div>
+    <p class="eyebrow">404</p>
+    <h1>页面进入了暗面</h1>
+    <p>链接可能已经变化，也可能从未存在。</p>
+    <div class="not-found-actions">
+      <a class="pill" href={withBase("/")}>返回首页</a>
+      <a class="pill" href={withBase("/blog/")}>阅读博客</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    display: grid;
+    min-height: 70vh;
+    place-content: center;
+    justify-items: start;
+  }
+
+  .not-found h1 {
+    margin: 1rem 0;
+    font-size: clamp(3rem, 9vw, 7rem);
+  }
+
+  .not-found > p {
+    color: var(--muted);
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .dark-moon {
+    position: absolute;
+    right: 5%;
+    z-index: -1;
+    width: min(35vw, 22rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #090909;
+    box-shadow: -1rem 0 2rem rgba(255, 255, 255, 0.18);
+  }
+</style>

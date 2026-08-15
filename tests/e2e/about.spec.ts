@@ -15,3 +15,16 @@ test("presents career positioning and a downloadable resume", async ({
   await expect(resume).toHaveAttribute("href", /yin-yuhao-resume\.pdf$/);
   await expect(page.locator("body")).not.toContainText(/1[3-9]\d{9}/);
 });
+
+test("preserves the portrait aspect ratio", async ({ page }) => {
+  await page.goto("/about/");
+  const ratios = await page.getByAltText("尹禹皓职业照片").evaluate((image) => {
+    const portrait = image as HTMLImageElement;
+    return {
+      displayed: portrait.clientWidth / portrait.clientHeight,
+      natural: portrait.naturalWidth / portrait.naturalHeight,
+    };
+  });
+
+  expect(Math.abs(ratios.displayed - ratios.natural)).toBeLessThan(0.01);
+});

@@ -17,6 +17,29 @@ test("renders the accessible three-item navigation", async ({ page }) => {
   );
 });
 
+test("renders a branded 404 with recovery links", async ({ page }) => {
+  await page.goto("/404.html");
+  await expect(
+    page.getByRole("heading", { name: "页面进入了暗面" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "返回首页" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "阅读博客" })).toBeVisible();
+});
+
+test("removes continuous motion when reduced motion is requested", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const duration = await page
+    .locator(".moon-orbit span")
+    .evaluate((node) => getComputedStyle(node).animationDuration);
+  const milliseconds = duration.endsWith("ms")
+    ? Number.parseFloat(duration)
+    : Number.parseFloat(duration) * 1_000;
+  expect(milliseconds).toBeLessThanOrEqual(0.01);
+});
+
 test("keeps a keyboard-visible skip link", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");

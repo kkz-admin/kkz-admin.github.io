@@ -20,6 +20,7 @@ for (const name of Object.keys(buildEnvironment)) {
   }
 }
 delete buildEnvironment.NODE_ENV;
+buildEnvironment.CI = "true";
 
 describe("BaseLayout", () => {
   it("emits a base-path-safe default favicon URL", async () => {
@@ -32,5 +33,5 @@ describe("BaseLayout", () => {
     const html = await readFile(`${projectRoot}/dist/index.html`, "utf8");
 
     expect(html).toContain('rel="icon" href="/personal-blog/favicon.svg"');
-  });
+  }, 15_000);
 });
