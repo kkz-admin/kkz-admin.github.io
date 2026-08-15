@@ -4,3 +4,6 @@ dist/
 .superpowers/
 tmp/
 .worktrees/
+playwright-report/
+test-results/
+.lighthouseci/
