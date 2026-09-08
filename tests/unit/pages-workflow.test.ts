@@ -61,3 +61,17 @@ describe("Pages workflow package manager contract", () => {
     );
   });
 });
+
+describe("Playwright CI web server contract", () => {
+  it("binds the Astro preview server to the tested IPv4 address", async () => {
+    const config = await readFile(projectFile("playwright.config.ts"), "utf8");
+
+    expect(config).toContain('command: "pnpm preview --host 127.0.0.1",');
+  });
+
+  it("allows enough time for the preview server to start on CI", async () => {
+    const config = await readFile(projectFile("playwright.config.ts"), "utf8");
+
+    expect(config).toContain("timeout: 120_000,");
+  });
+});

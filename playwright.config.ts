@@ -5,8 +5,9 @@ export default defineConfig({
   fullyParallel: true,
   reporter: "list",
   webServer: {
-    command: "pnpm preview",
+    command: "pnpm preview --host 127.0.0.1",
     url: "http://127.0.0.1:4321/",
+    timeout: 120_000,
     reuseExistingServer: !process.env.CI,
   },
   use: {
